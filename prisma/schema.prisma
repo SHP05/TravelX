@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "DATABASE_URL"
+  url      = "postgresql://postgres:Suman@5296@localhost:5432/travelx_db"
 }
 
 enum Role {
@@ -31,12 +31,20 @@ model User {
 model Tour {
   id          Int       @id @default(autoincrement())
   title       String
+  agentId     Int
   description String
   priceAdult  Float
   priceChild  Float
   contactNo   String
-  admin       User      @relation(fields: [adminId], references: [id])
-  adminId     Int
+  from        String
+  to          String
+  nights      Int
+  Inclusion   String[]
+  paymentPolicy   String[]
+  meals       Boolean
+  accommodation   Boolean
+  transnfer   Boolean
+  admin       User      @relation(fields: [agentId], references: [id])
   bookings    Booking[]
   reviews     Review[]
 }

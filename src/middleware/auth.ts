@@ -12,33 +12,65 @@ interface JwtPayload {
   role: string;
 }
 
+// export const authenticate = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   const token = req.headers.authorization?.split(' ')[1];
+//   if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+//     req.user = {
+//       id: decoded.id,
+//       role: decoded.role as 'ADMIN' | 'USER',
+//     };
+//     next();
+//   } catch (error) {
+//     return res.status(401).json({ message: 'Unauthorized' });
+//   }
+// };
+
+// export const isAdmin = (
+//   req: CustomRequest,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   if (req.user?.role !== 'ADMIN')
+//     // return res.status(403).json({ message: 'Admin access required' });
+//     return new ErrorHandler('Admin access required', 403);
+//   next();
+// };
+
+// src/middleware/auth.ts
 export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    req.user = {
-      id: decoded.id,
-      role: decoded.role as 'ADMIN' | 'USER',
-    };
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as jwt.JwtPayload;
+    req.user = { id: decoded.id, role: decoded.role };
     next();
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 };
 
-export const isAdmin = (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.user?.role !== 'ADMIN')
-    // return res.status(403).json({ message: 'Admin access required' });
-    return new ErrorHandler('Admin access required', 403);
-  next();
+export const authorize = (role: string) => {
+  return (req: CustomRequest, res: Response, next: NextFunction) => {
+    if (req.user?.role !== role) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    next();
+  };
 };
