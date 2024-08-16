@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticate, authorize } from '../middleware/auth';
-import { getAllTours, createTour } from '../controllers/tours';
+import { authenticate, authorize } from '../middleware/auth.middleware';
+import { getAllTours, createTour } from '../controllers/tours.controllers';
 
 const router = express.Router();
 
