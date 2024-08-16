@@ -3,7 +3,6 @@ import { prisma } from '../db/index';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ErrorHandler } from '../helpers/helper';
-import { log } from 'console';
 
 export const Register = async (
   req: Request,
@@ -67,7 +66,7 @@ export const Login = async (
       maxAge: 3600000,
     });
 
-    res.status(200).json({ message: 'Logged in successfully!' });
+    res.status(200).json({ message: 'Logged in successfully!', data: user });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ err });
