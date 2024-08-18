@@ -31,7 +31,10 @@ export const getAllTours = async (
         },
       },
     });
-    res.status(200).json(tours);
+    res.status(200).json({
+      status: 'Success',
+      data: tours,
+    });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching tours.' });
   }
@@ -70,7 +73,11 @@ export const createTour = async (
         },
       },
     });
-    res.status(201).json({ data: tour });
+
+    res.status(201).json({
+      status: 'Success',
+      data: tour,
+    });
   } catch (error) {
     res
       .status(500)

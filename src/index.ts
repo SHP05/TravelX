@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
-import authRoutes from './routes/auth';
-import tourRoutes from './routes/tours';
+import authRoutes from './routes/auth.routes';
+import tourRoutes from './routes/tours.routes';
+import bookingRoutes from './routes/booking.routes';
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/tour', tourRoutes);
+app.use('/booking', bookingRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Travelex!!');

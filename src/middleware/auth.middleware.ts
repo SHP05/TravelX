@@ -19,6 +19,7 @@ declare module 'express-serve-static-core' {
       | undefined;
   }
 }
+
 export const authorize: any = (
   req: CustomRequest,
   res: Response,
